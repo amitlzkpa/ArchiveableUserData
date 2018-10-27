@@ -29,7 +29,7 @@ namespace ArchivableUserData
         ///<returns>The command name as it appears on the Rhino command line.</returns>
         public override string EnglishName
         {
-            get { return "ArchivableUserData"; }
+            get { return "ArchivableUserDataCommand"; }
         }
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
@@ -38,26 +38,25 @@ namespace ArchivableUserData
 
             RhinoObject r = doc.Objects.Find(new Guid("8abfe660-98a6-4e68-ae81-995fd2860d38"));
             Rhino.DocObjects.Custom.UserData ud = null;
-
+            bool p = false;
 
             // remove
             //ud = r.Geometry.UserData.Find(typeof(CustomDataClass)) as CustomDataClass;
             //if (ud != null)
-            //{
-            //    bool p = r.Geometry.UserData.Remove(ud);
-            //}
+            //    p = r.Geometry.UserData.Remove(ud);
 
 
             // add
-            //ud = GetCustomData();
-            //bool p = r.Geometry.UserData.Add(ud);
+            ud = GetCustomData();
+            RhinoApp.WriteLine(ud.ToString());
+            p = r.Geometry.UserData.Add(ud);
 
 
-            // serialize
-            ud = r.Geometry.UserData.Find(typeof(CustomDataClass)) as CustomDataClass;
-            string outFilePath = "G:/00    CURRENT/Rhino/ArchivableUserData/ArchivableUserData/files/out.json";
-            using (StreamWriter sw = new StreamWriter(outFilePath))
-                sw.Write(JsonConvert.SerializeObject(ud, Formatting.Indented, new UserDataSerializer()));
+            // serialize to file
+            //ud = r.Geometry.UserData.Find(typeof(CustomDataClass)) as CustomDataClass;
+            //string outFilePath = "G:/00    CURRENT/Rhino/ArchivableUserData/ArchivableUserData/files/out.json";
+            //using (StreamWriter sw = new StreamWriter(outFilePath))
+            //    sw.Write(JsonConvert.SerializeObject(ud, Formatting.Indented, new UserDataSerializer()));
 
 
             RhinoApp.WriteLine((ud != null) ? ud.ToString() : "");
@@ -69,13 +68,7 @@ namespace ArchivableUserData
 
         private CustomDataClass GetCustomData()
         {
-            object[] nd = new object[20];
-            nd[0] = new TestClassA();
-            nd[1] = new TestClassB();
-            nd[2] = new TestClassC();
-            nd[3] = new TestClassD();
-            nd[4] = new TestClassE();
-            CustomDataClass d = new CustomDataClass(42, 12.34, nd);
+            CustomDataClass d = new CustomDataClass(42, 12.34);
             return d;
         }
 

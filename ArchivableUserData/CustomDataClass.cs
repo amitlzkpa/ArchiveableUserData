@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using Rhino;
 using System.Runtime.InteropServices;
 using System.Collections;
+
+using Rhino;
+
+using Newtonsoft.Json;
 
 namespace ArchivableUserData
 {
@@ -75,7 +77,7 @@ namespace ArchivableUserData
 
 
 
-
+    // ----------------------------------------------------
 
 
 
@@ -84,7 +86,7 @@ namespace ArchivableUserData
     {
         public int alpha { get; set; }
         public double beta { get; set; }
-        //public object[] nestedData = new object[20];
+
         public TestClassA classA = new TestClassA();
         public TestClassB classB = new TestClassB();
         public TestClassC classC = new TestClassC();
@@ -94,17 +96,10 @@ namespace ArchivableUserData
 
         public CustomDataClass() { }
 
-        public CustomDataClass(int a, double b, object[] testClasses = null)
+        public CustomDataClass(int a, double b)
         {
             alpha = a;
             beta = b;
-            //if(testClasses != null)
-            //{
-            //    for(int i=0; i<testClasses.Length; i++)
-            //    {
-            //        nestedData[i] = testClasses[i];
-            //    }
-            //}
         }
 
         public override string Description
@@ -114,11 +109,7 @@ namespace ArchivableUserData
 
         public override string ToString()
         {
-            string ret = string.Format("alpha={0}, beta={1} | ", alpha, beta);
-            //for (int i = 0; i < nestedData.Length; i++)
-            //{
-            //    ret += (nestedData[i] != null) ? nestedData[i].GetType().Name + ", " : "";
-            //}
+            string ret = string.Format("alpha={0}, beta={1}", alpha, beta);
             return ret;
         }
 
@@ -135,19 +126,26 @@ namespace ArchivableUserData
         protected override bool Read(Rhino.FileIO.BinaryArchiveReader archive)
         {
             Rhino.Collections.ArchivableDictionary dict = archive.ReadDictionary();
-            if (dict.ContainsKey("Weight") && dict.ContainsKey("Density"))
-            {
-                alpha = (int)dict["Weight"];
-                beta = (double)dict["Density"];
-            }
+            if (dict.ContainsKey("alpha")) alpha = (int)dict["alpha"];
+            if (dict.ContainsKey("beta")) beta = (double)dict["beta"];
+            if (dict.ContainsKey("classA")) classA = JsonConvert.DeserializeObject<TestClassA>(dict.GetString("classA"));
+            if (dict.ContainsKey("classB")) classB = JsonConvert.DeserializeObject<TestClassB>(dict.GetString("classB"));
+            if (dict.ContainsKey("classC")) classC = JsonConvert.DeserializeObject<TestClassC>(dict.GetString("classC"));
+            if (dict.ContainsKey("classD")) classD = JsonConvert.DeserializeObject<TestClassD>(dict.GetString("classD"));
+            if (dict.ContainsKey("classE")) classE = JsonConvert.DeserializeObject<TestClassE>(dict.GetString("classE"));
             return true;
         }
 
         protected override bool Write(Rhino.FileIO.BinaryArchiveWriter archive)
         {
             Rhino.Collections.ArchivableDictionary dict = new Rhino.Collections.ArchivableDictionary(1, "CustomData");
-            dict.Set("Weight", alpha);
-            dict.Set("Density", beta);
+            dict.Set("alpha", alpha);
+            dict.Set("beta", beta);
+            dict.Set("classA", JsonConvert.SerializeObject(classA, Formatting.Indented));
+            dict.Set("classB", JsonConvert.SerializeObject(classB, Formatting.Indented));
+            dict.Set("classC", JsonConvert.SerializeObject(classC, Formatting.Indented));
+            dict.Set("classD", JsonConvert.SerializeObject(classD, Formatting.Indented));
+            dict.Set("classE", JsonConvert.SerializeObject(classE, Formatting.Indented));
             archive.WriteDictionary(dict);
             return true;
         }
