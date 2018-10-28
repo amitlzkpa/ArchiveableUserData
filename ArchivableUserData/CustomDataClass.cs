@@ -55,7 +55,7 @@ namespace ArchivableUserData
 
     public class TestClassD : IEnumerable
     {
-        private List<int> l = new List<int>() { 1, 2, 5, 12, 29, 70 };
+        public List<int> l = new List<int>() { 1, 2, 5, 12, 29, 70 };
 
         public IEnumerator GetEnumerator()
         {
@@ -71,7 +71,7 @@ namespace ArchivableUserData
 
         public void Run()
         {
-            Console.WriteLine(string.Format("{0}-{1}!", boo, yeah));
+            RhinoApp.WriteLine(string.Format("{0}-{1}!", boo, yeah));
         }
     }
 
@@ -131,7 +131,7 @@ namespace ArchivableUserData
             if (dict.ContainsKey("classA")) classA = JsonConvert.DeserializeObject<TestClassA>(dict.GetString("classA"));
             if (dict.ContainsKey("classB")) classB = JsonConvert.DeserializeObject<TestClassB>(dict.GetString("classB"));
             if (dict.ContainsKey("classC")) classC = JsonConvert.DeserializeObject<TestClassC>(dict.GetString("classC"));
-            if (dict.ContainsKey("classD")) classD = JsonConvert.DeserializeObject<TestClassD>(dict.GetString("classD"));
+            //if (dict.ContainsKey("classD")) classD = JsonConvert.DeserializeObject<TestClassD>(dict.GetString("classD"));
             if (dict.ContainsKey("classE")) classE = JsonConvert.DeserializeObject<TestClassE>(dict.GetString("classE"));
             return true;
         }

@@ -36,7 +36,7 @@ namespace ArchivableUserData
         {
 
 
-            RhinoObject r = doc.Objects.Find(new Guid("8abfe660-98a6-4e68-ae81-995fd2860d38"));
+            RhinoObject r = doc.Objects.Find(new Guid("169d9223-991d-41dd-81e5-89c4c71b6ab3"));
             Rhino.DocObjects.Custom.UserData ud = null;
             bool p = false;
 
@@ -47,13 +47,16 @@ namespace ArchivableUserData
 
 
             // add
-            ud = GetCustomData();
-            RhinoApp.WriteLine(ud.ToString());
-            p = r.Geometry.UserData.Add(ud);
+            //ud = GetCustomData();
+            //(ud as CustomDataClass)?.classE.Run();
+            //RhinoApp.WriteLine(ud.ToString());
+            //p = r.Geometry.UserData.Add(ud);
 
-
-            // serialize to file
+            // read
             //ud = r.Geometry.UserData.Find(typeof(CustomDataClass)) as CustomDataClass;
+            //(ud as CustomDataClass)?.classE.Run();
+
+            //serialize to file
             //string outFilePath = "G:/00    CURRENT/Rhino/ArchivableUserData/ArchivableUserData/files/out.json";
             //using (StreamWriter sw = new StreamWriter(outFilePath))
             //    sw.Write(JsonConvert.SerializeObject(ud, Formatting.Indented, new UserDataSerializer()));
