@@ -32,6 +32,9 @@ namespace ArchivableUserData
             get { return "ArchivableUserDataCommand"; }
         }
 
+        
+
+
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
 
@@ -47,14 +50,16 @@ namespace ArchivableUserData
 
 
             // add
-            //ud = GetCustomData();
-            //(ud as CustomDataClass)?.classE.Run();
-            //RhinoApp.WriteLine(ud.ToString());
-            //p = r.Geometry.UserData.Add(ud);
+            ud = GetCustomData();
+            (ud as CustomDataClass)?.classE.Run();
+            RhinoApp.WriteLine(ud.ToString());
+            p = r.Geometry.UserData.Add(ud);
 
             // read
-            //ud = r.Geometry.UserData.Find(typeof(CustomDataClass)) as CustomDataClass;
-            //(ud as CustomDataClass)?.classE.Run();
+            ud = r.Geometry.UserData.Find(typeof(CustomDataClass)) as CustomDataClass;
+            (ud as CustomDataClass)?.classE.Run();
+
+            //ud = r.Geometry.UserData.Find(typeof(Rhino.DocObjects.Custom.UserData)) as Rhino.DocObjects.Custom.UserData;
 
             //serialize to file
             //string outFilePath = "G:/00    CURRENT/Rhino/ArchivableUserData/ArchivableUserData/files/out.json";
@@ -62,7 +67,17 @@ namespace ArchivableUserData
             //    sw.Write(JsonConvert.SerializeObject(ud, Formatting.Indented, new UserDataSerializer()));
 
 
-            RhinoApp.WriteLine((ud != null) ? ud.ToString() : "");
+
+
+            //string s = UserDataSerializer.GenerateCSharpCode("DynLoadTestClass");
+            //RhinoApp.WriteLine(s);
+
+
+
+
+
+
+            //RhinoApp.WriteLine((ud != null) ? ud.ToString() : "");
 
             return Result.Success;
         }
