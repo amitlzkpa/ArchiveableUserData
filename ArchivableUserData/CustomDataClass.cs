@@ -2,13 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Collections;
-using System.IO;
 
-using System.Reflection;
-using System.CodeDom.Compiler;
-using Microsoft.CSharp;
-
-using Rhino;
 using Newtonsoft.Json;
 
 namespace ArchivableUserData
@@ -86,7 +80,7 @@ namespace ArchivableUserData
 
 
     [Guid("1158A37F-7D33-4704-9243-A850498A8813")]
-    public class CustomDataClass : Rhino.DocObjects.Custom.UserData
+    public class CustomDataClass : HotLoadingUserData
     {
         public int alpha { get; set; }
         public double beta { get; set; }
@@ -130,22 +124,12 @@ namespace ArchivableUserData
         protected override bool Read(Rhino.FileIO.BinaryArchiveReader archive)
         {
             Rhino.Collections.ArchivableDictionary dict = archive.ReadDictionary();
+            object ho = base.ReadHotLoadData(dict);
             if (dict.ContainsKey("alpha")) alpha = (int)dict["alpha"];
             if (dict.ContainsKey("beta")) beta = (double)dict["beta"];
             if (dict.ContainsKey("classA")) classA = JsonConvert.DeserializeObject<TestClassA>(dict.GetString("classA"));
             if (dict.ContainsKey("classB")) classB = JsonConvert.DeserializeObject<TestClassB>(dict.GetString("classB"));
             if (dict.ContainsKey("classC")) classC = JsonConvert.DeserializeObject<TestClassC>(dict.GetString("classC"));
-
-            string encAss = "";
-            string type = "";
-            if (dict.ContainsKey("EncodedAssembly")) encAss = dict.GetString("EncodedAssembly");
-            if (dict.ContainsKey("Type")) type = dict.GetString("Type");
-            byte[] assByt = Convert.FromBase64String(encAss);
-            string tempPath = Path.GetTempFileName();
-            File.WriteAllBytes(tempPath, assByt);
-            Assembly assembly = Assembly.LoadFrom(tempPath);
-            Type t = assembly.GetType(type);
-            object instanceOfMyType = Activator.CreateInstance(t);
             //if (dict.ContainsKey("classD")) classD = JsonConvert.DeserializeObject<TestClassD>(dict.GetString("classD"));
             if (dict.ContainsKey("classE")) classE = JsonConvert.DeserializeObject<TestClassE>(dict.GetString("classE"));
             return true;
@@ -154,6 +138,7 @@ namespace ArchivableUserData
         protected override bool Write(Rhino.FileIO.BinaryArchiveWriter archive)
         {
             Rhino.Collections.ArchivableDictionary dict = new Rhino.Collections.ArchivableDictionary(1, "CustomData");
+            base.WriteHotLoadData(dict);
             dict.Set("alpha", alpha);
             dict.Set("beta", beta);
             dict.Set("classA", JsonConvert.SerializeObject(classA, Formatting.Indented));
@@ -161,11 +146,6 @@ namespace ArchivableUserData
             dict.Set("classC", JsonConvert.SerializeObject(classC, Formatting.Indented));
             dict.Set("classD", JsonConvert.SerializeObject(classD, Formatting.Indented));
             dict.Set("classE", JsonConvert.SerializeObject(classE, Formatting.Indented));
-
-            string encAss = GenerateCSharpCode(this.GetType());
-            dict.Set("EncodedAssembly", encAss);
-            dict.Set("Type", this.GetType().FullName);
-
             archive.WriteDictionary(dict);
             return true;
         }
@@ -174,98 +154,79 @@ namespace ArchivableUserData
 
 
 
-        public string[] GetReferencedAssemblies()
-        {
-            string[] refs = new string[]
-                                {
-                                    "System",
-                                    "System.Collections.Generic",
-                                    "System.Runtime.InteropServices",
-                                    "System.Collections",
-                                    "Rhino",
-                                    "Newtonsoft.Json"
-                                };
-            return refs;
-        }
-
-
-        public string GetSourceFilePath()
-        {
-            return "G:/00    CURRENT/Rhino/ArchivableUserData/ArchivableUserData/ArchivableUserData/CustomDataClass.cs";
-        }
 
 
 
 
 
 
-
-        private string GenerateCSharpCode(Type type)
-        {
-            string className = type.Name;
-
-
-            CSharpCodeProvider provider = new CSharpCodeProvider();
+        //    private string GenerateCSharpCode(Type type)
+        //    {
+        //        string className = type.Name;
 
 
-            // Build the file name.
-            string sourceFileName;
-            if (provider.FileExtension[0] == '.')
-            {
-                sourceFileName = className + provider.FileExtension;
-            }
-            else
-            {
-                sourceFileName = className + "." + provider.FileExtension;
-            }
+        //        CSharpCodeProvider provider = new CSharpCodeProvider();
 
 
-            // Build the parameters for source compilation.
-            CompilerParameters cp = new CompilerParameters();
-            cp.IncludeDebugInformation = true;
+        //        // Build the file name.
+        //        string sourceFileName;
+        //        if (provider.FileExtension[0] == '.')
+        //        {
+        //            sourceFileName = className + provider.FileExtension;
+        //        }
+        //        else
+        //        {
+        //            sourceFileName = className + "." + provider.FileExtension;
+        //        }
 
-            // Add assembly references.
-            //cp.ReferencedAssemblies.Add("System.dll");
-            //cp.ReferencedAssemblies.Add("System.Collections.dll");
-            //cp.ReferencedAssemblies.Add("System.Runtime.InteropServices.dll");
-            //cp.ReferencedAssemblies.Add("Newtonsoft.Json.dll");
-            // ugly hard-refs
-            cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.dll");
-            cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.Core.dll");
-            cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.Drawing.dll");
-            cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.Windows.Forms.dll");
-            cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Rhinoceros 5/System/rhinocommon.dll");
-            cp.ReferencedAssemblies.Add("G:/00    CURRENT/Rhino/ArchivableUserData/ArchivableUserData/packages/Newtonsoft.Json.11.0.2/lib/net40/Newtonsoft.Json.dll");
 
-            cp.GenerateExecutable = false;
-            cp.GenerateInMemory = false;
+        //        // Build the parameters for source compilation.
+        //        CompilerParameters cp = new CompilerParameters();
+        //        cp.IncludeDebugInformation = true;
 
-            // Invoke compilation.
-            //CodeCompileUnit cu = new CodeCompileUnit();
-            //provider.CompileAssemblyFromDom(cp, cu);
+        //        // Add assembly references.
+        //        //cp.ReferencedAssemblies.Add("System.dll");
+        //        //cp.ReferencedAssemblies.Add("System.Collections.dll");
+        //        //cp.ReferencedAssemblies.Add("System.Runtime.InteropServices.dll");
+        //        //cp.ReferencedAssemblies.Add("Newtonsoft.Json.dll");
+        //        // ugly hard-refs
+        //        cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.dll");
+        //        cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.Core.dll");
+        //        cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.Drawing.dll");
+        //        cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.Windows.Forms.dll");
+        //        cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Rhinoceros 5/System/rhinocommon.dll");
+        //        cp.ReferencedAssemblies.Add("G:/00    CURRENT/Rhino/ArchivableUserData/ArchivableUserData/packages/Newtonsoft.Json.11.0.2/lib/net40/Newtonsoft.Json.dll");
 
-            // ugly hard-link
-            FileInfo sourceFilePath = new FileInfo("../" + sourceFileName);
-            CompilerResults cr = provider.CompileAssemblyFromFile(cp, sourceFilePath.FullName);
-            string encodedAssembly = "";
+        //        cp.GenerateExecutable = false;
+        //        cp.GenerateInMemory = false;
 
-            if (cr.Errors.Count > 0)
-            {
-                // Display compilation errors.
-                RhinoApp.WriteLine("Errors building {0} into {1}",
-                    sourceFileName, cr.PathToAssembly);
-                foreach (CompilerError ce in cr.Errors)
-                {
-                    RhinoApp.WriteLine("  {0}", ce.ToString());
-                    RhinoApp.WriteLine();
-                }
-            }
-            else
-            {
-                encodedAssembly = Convert.ToBase64String(File.ReadAllBytes(cp.OutputAssembly));
-            }
+        //        // Invoke compilation.
+        //        //CodeCompileUnit cu = new CodeCompileUnit();
+        //        //provider.CompileAssemblyFromDom(cp, cu);
 
-            return encodedAssembly;
-        }
+        //        // ugly hard-link
+        //        FileInfo sourceFilePath = new FileInfo("../" + sourceFileName);
+        //        CompilerResults cr = provider.CompileAssemblyFromFile(cp, sourceFilePath.FullName);
+        //        string encodedAssembly = "";
+
+        //        if (cr.Errors.Count > 0)
+        //        {
+        //            // Display compilation errors.
+        //            RhinoApp.WriteLine("Errors building {0} into {1}",
+        //                sourceFileName, cr.PathToAssembly);
+        //            foreach (CompilerError ce in cr.Errors)
+        //            {
+        //                RhinoApp.WriteLine("  {0}", ce.ToString());
+        //                RhinoApp.WriteLine();
+        //            }
+        //        }
+        //        else
+        //        {
+        //            encodedAssembly = Convert.ToBase64String(File.ReadAllBytes(cp.OutputAssembly));
+        //        }
+
+        //        return encodedAssembly;
+        //    }
+        //}
     }
 }
