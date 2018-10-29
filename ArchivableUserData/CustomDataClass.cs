@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Collections;
+using System.IO;
 
 using System.Reflection;
 using System.CodeDom.Compiler;
@@ -134,6 +135,17 @@ namespace ArchivableUserData
             if (dict.ContainsKey("classA")) classA = JsonConvert.DeserializeObject<TestClassA>(dict.GetString("classA"));
             if (dict.ContainsKey("classB")) classB = JsonConvert.DeserializeObject<TestClassB>(dict.GetString("classB"));
             if (dict.ContainsKey("classC")) classC = JsonConvert.DeserializeObject<TestClassC>(dict.GetString("classC"));
+
+            string encAss = "";
+            string type = "";
+            if (dict.ContainsKey("EncodedAssembly")) encAss = dict.GetString("EncodedAssembly");
+            if (dict.ContainsKey("Type")) type = dict.GetString("Type");
+            byte[] assByt = Convert.FromBase64String(encAss);
+            string tempPath = Path.GetTempFileName();
+            File.WriteAllBytes(tempPath, assByt);
+            Assembly assembly = Assembly.LoadFrom(tempPath);
+            Type t = assembly.GetType(type);
+            object instanceOfMyType = Activator.CreateInstance(t);
             //if (dict.ContainsKey("classD")) classD = JsonConvert.DeserializeObject<TestClassD>(dict.GetString("classD"));
             if (dict.ContainsKey("classE")) classE = JsonConvert.DeserializeObject<TestClassE>(dict.GetString("classE"));
             return true;
@@ -149,6 +161,11 @@ namespace ArchivableUserData
             dict.Set("classC", JsonConvert.SerializeObject(classC, Formatting.Indented));
             dict.Set("classD", JsonConvert.SerializeObject(classD, Formatting.Indented));
             dict.Set("classE", JsonConvert.SerializeObject(classE, Formatting.Indented));
+
+            string encAss = GenerateCSharpCode(this.GetType());
+            dict.Set("EncodedAssembly", encAss);
+            dict.Set("Type", this.GetType().FullName);
+
             archive.WriteDictionary(dict);
             return true;
         }
