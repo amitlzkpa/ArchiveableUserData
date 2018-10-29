@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Collections;
 
-using Rhino;
+//using Rhino;
 
 using Newtonsoft.Json;
 
@@ -71,7 +71,7 @@ namespace ArchivableUserData
 
         public void Run()
         {
-            RhinoApp.WriteLine(string.Format("{0}-{1}!", boo, yeah));
+            Rhino.RhinoApp.WriteLine(string.Format("{0}-{1}!", boo, yeah));
         }
     }
 
@@ -149,5 +149,32 @@ namespace ArchivableUserData
             archive.WriteDictionary(dict);
             return true;
         }
+
+
+
+
+
+        public string[] GetReferencedAssemblies()
+        {
+            string[] refs = new string[]
+                                {
+                                    "System",
+                                    "System.Collections.Generic",
+                                    "System.Runtime.InteropServices",
+                                    "System.Collections",
+                                    "Rhino",
+                                    "Newtonsoft.Json"
+                                };
+            return refs;
+        }
+
+
+        public string GetSourceFilePath()
+        {
+            return "G:/00    CURRENT/Rhino/ArchivableUserData/ArchivableUserData/ArchivableUserData/CustomDataClass.cs";
+        }
+
+
+
     }
 }
