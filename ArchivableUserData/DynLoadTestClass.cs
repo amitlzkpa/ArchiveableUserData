@@ -1,4 +1,4 @@
-﻿using Rhino;
+﻿//using Rhino;
 
 namespace ArchivableUserData
 {
@@ -10,7 +10,7 @@ namespace ArchivableUserData
 
         public void Method1(string gamma)
         {
-            RhinoApp.WriteLine($"{alpha}-{gamma}");
+            //RhinoApp.WriteLine(alpha + "-" + gamma);
         }
 
         public int Method2(int add)

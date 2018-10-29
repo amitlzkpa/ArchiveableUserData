@@ -51,6 +51,7 @@
     <Compile Include="ArchivableUserDataCommand.cs" />
     <Compile Include="ArchivableUserDataPlugIn.cs" />
     <Compile Include="CustomDataClass.cs" />
+    <Compile Include="DynLoadTestClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserDataSerializer.cs" />
   </ItemGroup>
