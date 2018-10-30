@@ -72,8 +72,9 @@ namespace ArchivableUserData
 
 
 
-        protected string GenerateCSharpCode(Type type)
+        public static string GenerateCSharpCode(object o)
         {
+            Type type = o.GetType();
             string className = type.Name;
 
 
@@ -100,14 +101,14 @@ namespace ArchivableUserData
             //cp.ReferencedAssemblies.Add("System.dll");
             //cp.ReferencedAssemblies.Add("System.Collections.dll");
             //cp.ReferencedAssemblies.Add("System.Runtime.InteropServices.dll");
-            cp.ReferencedAssemblies.Add("HotLoadingUserData.dll");
+            //cp.ReferencedAssemblies.Add("HotLoadingUserData.dll");
             // ugly hard-refs
             cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.dll");
             cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.Core.dll");
-            cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.Drawing.dll");
-            cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.Windows.Forms.dll");
+            //cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.Drawing.dll");
+            //cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.Windows.Forms.dll");
             cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Rhinoceros 5/System/rhinocommon.dll");
-            cp.ReferencedAssemblies.Add("G:/00    CURRENT/Rhino/ArchivableUserData/ArchivableUserData/packages/Newtonsoft.Json.11.0.2/lib/net40/Newtonsoft.Json.dll");
+            //cp.ReferencedAssemblies.Add("G:/00    CURRENT/Rhino/ArchivableUserData/ArchivableUserData/packages/Newtonsoft.Json.11.0.2/lib/net40/Newtonsoft.Json.dll");
 
             cp.GenerateExecutable = false;
             cp.GenerateInMemory = false;

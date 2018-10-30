@@ -5,6 +5,7 @@ using System.IO;
 using Rhino;
 using Rhino.Commands;
 using Rhino.DocObjects;
+using Rhino.DocObjects.Custom;
 
 using Newtonsoft.Json;
 
@@ -39,38 +40,34 @@ namespace ArchivableUserData
         {
 
 
-            RhinoObject r = doc.Objects.Find(new Guid("169d9223-991d-41dd-81e5-89c4c71b6ab3"));
+            RhinoObject r = doc.Objects.Find(new Guid("4e3c26e5-5554-4676-8606-b09bc7bac7e9"));
             Rhino.DocObjects.Custom.UserData ud = null;
             bool p = false;
 
-            // remove
-            //ud = r.Geometry.UserData.Find(typeof(CustomDataClass)) as CustomDataClass;
-            //if (ud != null)
-            //    p = r.Geometry.UserData.Remove(ud);
-
-
-            // add
-            //ud = GetCustomData();
-            //(ud as CustomDataClass)?.classE.Run();
-            //RhinoApp.WriteLine(ud.ToString());
-            //p = r.Geometry.UserData.Add(ud);
-
-            // read
-            ud = r.Geometry.UserData.Find(typeof(CustomDataClass)) as CustomDataClass;
-            (ud as CustomDataClass)?.classE.Run();
-
-            //ud = r.Geometry.UserData.Find(typeof(Rhino.DocObjects.Custom.UserData)) as Rhino.DocObjects.Custom.UserData;
-
-            //serialize to file
-            //string outFilePath = "G:/00    CURRENT/Rhino/ArchivableUserData/ArchivableUserData/files/out.json";
-            //using (StreamWriter sw = new StreamWriter(outFilePath))
-            //    sw.Write(JsonConvert.SerializeObject(ud, Formatting.Indented, new UserDataSerializer()));
 
 
 
 
-            //string s = UserDataSerializer.GenerateCSharpCode("DynLoadTestClass");
-            //RhinoApp.WriteLine(s);
+
+            //DynLoadTestClass cls = new DynLoadTestClass();
+            //string assStr = HotLoadingUserData.GenerateCSharpCode(cls);
+            //RhinoApp.WriteLine(assStr);
+            //r.Geometry.UserDictionary.Set("_assembly", assStr);
+
+            //string insStr = JsonConvert.SerializeObject(cls);
+            //RhinoApp.WriteLine(insStr);
+            //r.Geometry.UserDictionary.Set("_vals", insStr);
+
+
+
+
+
+
+            string s = r.Geometry.UserDictionary.GetString("_assembly");
+            string j = r.Geometry.UserDictionary.GetString("_vals");
+
+
+
 
 
 
