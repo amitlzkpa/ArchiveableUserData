@@ -50,10 +50,10 @@ namespace ArchivableUserData
 
 
             // add
-            ud = GetCustomData();
-            (ud as CustomDataClass)?.classE.Run();
-            RhinoApp.WriteLine(ud.ToString());
-            p = r.Geometry.UserData.Add(ud);
+            //ud = GetCustomData();
+            //(ud as CustomDataClass)?.classE.Run();
+            //RhinoApp.WriteLine(ud.ToString());
+            //p = r.Geometry.UserData.Add(ud);
 
             // read
             ud = r.Geometry.UserData.Find(typeof(CustomDataClass)) as CustomDataClass;
