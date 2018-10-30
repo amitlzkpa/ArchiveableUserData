@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 using Rhino;
 using Rhino.Commands;
@@ -58,6 +59,8 @@ namespace ArchivableUserData
             //RhinoApp.WriteLine(insStr);
             //r.Geometry.UserDictionary.Set("_vals", insStr);
 
+            //r.Geometry.UserDictionary.Set("_type", cls.GetType().Name);
+
 
 
 
@@ -67,6 +70,16 @@ namespace ArchivableUserData
             string j = r.Geometry.UserDictionary.GetString("_vals");
 
 
+
+
+            byte[] assBytes = Convert.FromBase64String(s);
+            string t = Path.GetTempFileName();
+            File.WriteAllBytes(t, assBytes);
+            Assembly assembly = Assembly.LoadFrom(t);
+
+            Type type = assembly.GetType("ArchivableUserData.DynLoadTestClass");
+
+            object instanceOfMyType = Activator.CreateInstance(type);
 
 
 
