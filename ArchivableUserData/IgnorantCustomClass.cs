@@ -34,7 +34,7 @@ namespace ArchivableUserData
 
         protected override bool Write(Rhino.FileIO.BinaryArchiveWriter archive)
         {
-            Rhino.Collections.ArchivableDictionary dict = new Rhino.Collections.ArchivableDictionary(1, "CustomData");
+            Rhino.Collections.ArchivableDictionary dict = new Rhino.Collections.ArchivableDictionary(1, "IgnorantCustomClass");
             base.WriteHotLoadData(dict);
 
             return true;

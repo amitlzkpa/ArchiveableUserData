@@ -242,4 +242,5 @@ ModelManifest.xml
 .fake/
 
 # Custom
-files/
+*.3dmbak
+*.rhl

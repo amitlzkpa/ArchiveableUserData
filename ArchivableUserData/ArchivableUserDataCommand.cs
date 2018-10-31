@@ -41,8 +41,8 @@ namespace ArchivableUserData
         {
 
 
-            RhinoObject r = doc.Objects.Find(new Guid("4e3c26e5-5554-4676-8606-b09bc7bac7e9"));
-            Rhino.DocObjects.Custom.UserData ud = null;
+            RhinoObject r = doc.Objects.FindByObjectType(ObjectType.AnyObject)[0];
+            UserData ud = null;
             bool p = false;
 
 
