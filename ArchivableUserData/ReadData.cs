@@ -42,7 +42,14 @@ namespace ArchivableUserData
 
             Assembly assembly = Assembly.LoadFrom(temp);
             Type type = assembly.GetType(t);
-            object instanceOfMyType = Activator.CreateInstance(type);
+            object instanceOfMyType = Activator.CreateInstance(type, true, 10, 2.718, "bye");
+            RhinoApp.WriteLine(instanceOfMyType.ToString());
+            // try to cast using inheritance/interface
+            DynLoadTestClass test = instanceOfMyType as DynLoadTestClass;
+            //MethodInfo method1 = type.GetMethod("Method1");
+            //method1.Invoke(test, new object[] { "bar" });
+            //MethodInfo method2 = type.GetMethod("Method2");
+            //method2.Invoke(test, new object[] { 6 });
 
             return Result.Success;
         }

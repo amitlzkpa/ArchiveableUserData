@@ -14,7 +14,7 @@ namespace ArchivableUserData
 
         public void Method1(string gamma)
         {
-            RhinoApp.WriteLine(string.Format("{0},{1},{2},{3},{4},{5}", alpha, beta, booly, inty, doubley, stringy));
+            RhinoApp.WriteLine(string.Format("{0},{1},{2},{3},{4},{5}-{6}", alpha, beta, booly, inty, doubley, stringy, gamma));
         }
 
         public int Method2(int add)
@@ -28,6 +28,7 @@ namespace ArchivableUserData
             inty = i;
             doubley = d;
             stringy = s;
+            beta = 420;
         }
 
         public DynLoadTestClass()

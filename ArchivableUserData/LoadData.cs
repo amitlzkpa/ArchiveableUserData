@@ -31,7 +31,9 @@ namespace ArchivableUserData
         {
             RhinoObject r = doc.Objects.FindByObjectType(ObjectType.AnyObject)[0];
 
-            DynLoadTestClass cls = new DynLoadTestClass();
+            DynLoadTestClass cls = new DynLoadTestClass(false, 63, 1.414, "hello");
+            cls.Method1("foo");
+            RhinoApp.WriteLine(cls.Method2(6).ToString());
             string asmStr = HotLoadingUserData.GenerateCSharpCode(cls);
             //RhinoApp.WriteLine(asmStr);
             r.Geometry.UserDictionary.Set("_assembly", asmStr);
