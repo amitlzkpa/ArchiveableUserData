@@ -9,7 +9,7 @@ Project is setup as a Rhino plugin.
 Build and install the plugin.  
 Run `LoadData`. This will serialize and load instances of `DynLoadTestClass` into the test object.  
 Save and close file.  
-Delete the class file for `DynLoadTestClass` and build again.  
+Delete/rename the class file for `DynLoadTestClass` and build again. You may have to resolve some broken references by commenting them out.  
 Run `ReadData`. This will read the file assembly for `DynLoadTestClass` from the object and dynamically load its instances.  
 
 ## Issues

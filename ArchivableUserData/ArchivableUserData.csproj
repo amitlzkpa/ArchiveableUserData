@@ -48,7 +48,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArchivableUserDataCommand.cs" />
     <Compile Include="ArchivableUserDataPlugIn.cs" />
     <Compile Include="CustomDataClass.cs" />
     <Compile Include="DynLoadTestClass.cs" />
