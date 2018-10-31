@@ -98,11 +98,11 @@ namespace ArchivableUserData
             cp.IncludeDebugInformation = true;
 
             // Add assembly references.
+            // ugly hard-refs
             //cp.ReferencedAssemblies.Add("System.dll");
             //cp.ReferencedAssemblies.Add("System.Collections.dll");
             //cp.ReferencedAssemblies.Add("System.Runtime.InteropServices.dll");
             //cp.ReferencedAssemblies.Add("HotLoadingUserData.dll");
-            // ugly hard-refs
             cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.dll");
             cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.Core.dll");
             //cp.ReferencedAssemblies.Add("C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.0/System.Drawing.dll");
@@ -112,10 +112,6 @@ namespace ArchivableUserData
 
             cp.GenerateExecutable = false;
             cp.GenerateInMemory = false;
-
-            // Invoke compilation.
-            //CodeCompileUnit cu = new CodeCompileUnit();
-            //provider.CompileAssemblyFromDom(cp, cu);
 
             // ugly hard-link
             FileInfo sourceFilePath = new FileInfo("../" + sourceFileName);
